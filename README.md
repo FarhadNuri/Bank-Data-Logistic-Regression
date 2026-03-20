@@ -20,3 +20,13 @@ In this phase, I split the dataset into train, validation, and test sets. First,
 After splitting, I checked the balance of target values in train, validation, and test sets to make sure they are similar. Next, I did feature scaling using StandardScaler. 
 
 As different features have very different values, like balance is very big but age is small. So I scaled them to similar range so model can learn properly. I fitted the scaler only on training data and then applied it on validation and test data, so model does not get any future information.
+
+### Initial Model Training & Validation
+
+I trained the logistic regression model using the training data. I set max iterations high so it can converge properly, and used class_weight balanced because data has more "no" than "yes". After training, I used the model to predict on validation set.
+
+I got around 84% accuracy, but I understood that accuracy is not very reliable for imbalanced data. My precision was around 41%, which means when model says someone will subscribe, it is correct less than half time.
+
+The F1 score was around 54%, and ROC-AUC was around 0.91. It shows the model is able to separate "yes" and "no"  quite well. From classification report, I saw that model is very strong in predicting "no" but weaker in predicting "yes" correctly, because it gives many false positives.
+
+Overall, I understood that my model is good at finding potential subscribers but it also predicts many wrong yes cases. This happens because I used class_weight balanced, so model tries more to not miss actual yes cases.
