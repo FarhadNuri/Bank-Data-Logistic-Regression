@@ -30,3 +30,12 @@ I got around 84% accuracy, but I understood that accuracy is not very reliable f
 The F1 score was around 54%, and ROC-AUC was around 0.91. It shows the model is able to separate "yes" and "no"  quite well. From classification report, I saw that model is very strong in predicting "no" but weaker in predicting "yes" correctly, because it gives many false positives.
 
 Overall, I understood that my model is good at finding potential subscribers but it also predicts many wrong yes cases. This happens because I used class_weight balanced, so model tries more to not miss actual yes cases.
+
+
+### Threshold Tuning and Model Analysis
+
+In this phase, I tried to improve my model by adjusting the decision threshold instead of using default 0.50. I tested different threshold values like 0.55, 0.60, up to 0.85 and observed how precision, recall and F1 score changes. I saw that when I increase threshold, precision increases but recall decreases. Then I created a full table of thresholds to find the best value instead of guessing.
+
+From the results, I found that F1 score was slowly increasing and reached highest around 0.76 threshold, but the improvement was very small compared to original model. Even after trying many thresholds, F1 was stuck around 0.55 range. This showed that threshold tuning alone is not enough to improve the model much.
+
+So I understood that my logistic regression model has reached its limit on this dataset. It is already doing good in terms of ROC-AUC, but cannot improve much more in F1 score. This means the problem is not with threshold or parameters, but with the model itself.
