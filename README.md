@@ -39,3 +39,54 @@ In this phase, I tried to improve my model by adjusting the decision threshold i
 From the results, I found that F1 score was slowly increasing and reached highest around 0.76 threshold, but the improvement was very small compared to original model. Even after trying many thresholds, F1 was stuck around 0.55 range. This showed that threshold tuning alone is not enough to improve the model much.
 
 So I understood that my logistic regression model has reached its limit on this dataset. It is already doing good in terms of ROC-AUC, but cannot improve much more in F1 score. This means the problem is not with threshold or parameters, but with the model itself.
+
+### Output Analysis
+
+### Before Threshold Tuning — Base Model
+
+Validation Set Results (Default Threshold 0.50)
+
+Before applying threshold tuning, the baseline logistic regression model gave good performance in terms of ROC-AUC with around 0.90, which means it can separate yes and no quite well. But precision for Yes class was low around 41%, so when the model predicts someone will subscribe, it is correct less than half of the time. On the other side, recall was high around 81%, so it is able to catch most of the real subscribers.
+
+
+| Class | Precision | Recall | F1-Score | Support |
+|-------|-----------|--------|----------|---------|
+| No | 0.97 | 0.84 | 0.90 | 5973 |
+| Yes | 0.41 | 0.81 | 0.54 | 791 |
+| **Accuracy** | | | **0.84** | **6764** |
+| Macro Avg | 0.69 | 0.82 | 0.72 | 6764 |
+| Weighted Avg | 0.90 | 0.84 | 0.86 | 6764 |
+
+> **ROC-AUC Score: 0.9068**
+
+The overall accuracy was around 84%, which looks good but actually misleading because of class imbalance. Even a simple model that always predicts No can get around 88% accuracy, so accuracy alone is not reliable here. The main problem of the model was low precision for Yes class. This happens because I used class_weight balanced, so model tries more to not miss real subscribers, which increases recall but also increases false positive predictions.
+
+### After Threshold Tuning
+
+To improve precision without retraining, I applied threshold tuning on logistic regression model. By default it predicts Yes when probability is 0.50 or more, but I increased this threshold so the model only predicts Yes when it is more confident. This helped reduce false alarms and improved precision.
+
+I tested different threshold values and found that F1 score was highest at around 0.76 with value near 0.56. Below this threshold, the model was predicting too many false Yes, and above this it started missing real subscribers. So 0.76 was the best balance between precision and recall.
+
+### Confusion Matrix Analysis
+
+For validation set with threshold 0.76, the model correctly predicted most of the No cases and a good number of Yes cases. It predicted around 5537 No correctly and 473 Yes correctly. But there were still some errors, around 436 No cases were wrongly predicted as Yes and 318 real Yes were missed. 
+
+For the test set, the results were very similar. The model correctly predicted around 5610 No and 467 Yes cases. Around 379 No were wrongly predicted as Yes and 326 real subscribers were missed. The overall pattern is almost same as validation set, with only small differences. 
+
+
+### Summary
+
+The logistic regression model was able to predict term deposit subscription quite well with final test accuracy around 89.6% and ROC-AUC around 0.90. It means most of the time the model ranks real subscriber higher than non-subscriber.
+
+
+| Metric | Value | 
+|--------|-------|
+| Final Accuracy | 89.60% | 
+| Precision (Yes) | 0.5523 | 
+| Recall (Yes) | 0.5890 | 
+| F1 Score (Yes) | 0.5565 | 
+| ROC-AUC | 0.9068 | 
+| Optimal Threshold | 0.76 | 
+
+
+After applying threshold tuning from 0.50 to around 0.76, precision improved a lot and overall accuracy also increased. Recall dropped a bit but it is still acceptable for this problem. Also the validation and test results are very similar, which shows the model is stable and not overfitting. Overall, the model is performing well and ready to use for this task.
