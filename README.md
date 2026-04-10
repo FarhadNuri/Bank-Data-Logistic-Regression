@@ -25,9 +25,7 @@ As different features have very different values, like balance is very big but a
 
 I trained the logistic regression model using the scaled training data. To handle class imbalance, I used class_weight as balanced. This is important because the dataset has many more No cases compared to Yes, so without this the model would mostly predict No and ignore real subscribers.
 
-With balanced weight, the model gives more importance to Yes class and gets more penalty when it makes mistake on it. I also set max_iter to 1000 so the model gets enough steps to properly learn and converge. Logistic regression uses an optimization method to find best values, so more iterations help in better learning.
-
-I also fixed random_state to 42 so that results stay same every time I run the model. This helps in reproducibility and consistency.
+I also set max_iter to 1000 so the model gets enough steps to properly learn and converge. I also fixed random_state to 42 so that results stay same every time I run the model.
 
 ###  Validation
 
